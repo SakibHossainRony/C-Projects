@@ -1,0 +1,154 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct Question {
+    char question[100];
+    char options[4][50];
+    int answer;
+};
+
+void runQuiz(struct Question* questions, int numQuestions) {
+    int totalMarks = 0;
+
+    printf("Welcome to the MCQ Quiz!\n");
+    printf("Enter your answers as the corresponding option number (e.g., 1, 2, 3, 4).\n\n");
+
+    for (int i = 0; i < numQuestions; i++) {
+        printf("%s\n", questions[i].question);
+
+        for (int j = 0; j < 4; j++) {
+            printf("%d. %s\n", j + 1, questions[i].options[j]);
+        }
+
+        int userAnswer;
+        printf("Your answer: ");
+
+        // Input validation for answer
+        while (scanf("%d", &userAnswer) != 1 || userAnswer < 1 || userAnswer > 4) {
+            printf("Invalid input. Please enter a valid option number (1-4): ");
+            fflush(stdin);
+        }
+
+        if (userAnswer == questions[i].answer) {
+            totalMarks++;
+        }
+    }
+
+    printf("\nTotal Marks Obtained: %d/%d\n", totalMarks, numQuestions);
+}
+
+void resetQuiz(int* totalMarks) {
+    *totalMarks = 0;
+}
+
+int main() {
+    struct Question cProgrammingQuestions[] = {
+        {
+            "What is the syntax to declare an integer variable in C?",
+            { "var", "int", "integer", "num" },
+            2
+        },
+        {
+            "Which of the following is NOT a valid data type in C?",
+            { "float", "bool", "string", "char" },
+            3
+        },
+        {
+            "What does the 'scanf' function do in C?",
+            { "Prints formatted text", "Reads a character from input", "Writes a character to a file", "Reads input from the user" },
+            4
+        },
+        {
+            "What is the output of the following code?\n\nint x = 5;\nprintf(\"%d\", ++x);",
+            { "5", "6", "Error", "Undefined" },
+            2
+        },
+        {
+            "Which keyword is used to dynamically allocate memory in C?",
+            { "alloc", "malloc", "new", "create" },
+            2
+        }
+    };
+
+    struct Question generalKnowledgeQuestions[] = {
+        {
+            "Which planet is known as the Red Planet?",
+            { "Mars", "Jupiter", "Venus", "Saturn" },
+            1
+        },
+        {
+            "Who painted the Mona Lisa?",
+            { "Pablo Picasso", "Vincent van Gogh", "Leonardo da Vinci", "Michelangelo" },
+            3
+        },
+        {
+            "What is the capital of Australia?",
+            { "Sydney", "Melbourne", "Canberra", "Brisbane" },
+            3
+        },
+        {
+            "Which country is famous for the Taj Mahal?",
+            { "India", "China", "Egypt", "Italy" },
+            1
+        },
+        {
+            "Which is the largest ocean in the world?",
+            { "Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean" },
+            4
+    }
+};
+
+int numCProgrammingQuestions = sizeof(cProgrammingQuestions) / sizeof(cProgrammingQuestions[0]);
+int numGeneralKnowledgeQuestions = sizeof(generalKnowledgeQuestions) / sizeof(generalKnowledgeQuestions[0]);
+int totalMarks = 0;
+int playAgain = 1;
+
+while (playAgain) {
+    printf("\nSelect a quiz category:\n");
+    printf("1. C Programming\n");
+    printf("2. General Knowledge\n");
+    printf("0. Exit\n");
+    printf("Enter your choice: ");
+
+    int categoryChoice;
+    scanf("%d", &categoryChoice);
+
+    switch (categoryChoice) {
+        case 0:
+            playAgain = 0;
+            break;
+        case 1:
+            resetQuiz(&totalMarks);
+            runQuiz(cProgrammingQuestions, numCProgrammingQuestions);
+            break;
+        case 2:
+            resetQuiz(&totalMarks);
+            runQuiz(generalKnowledgeQuestions, numGeneralKnowledgeQuestions);
+            break;
+        default:
+            printf("Invalid input. Exiting the program.\n");
+            playAgain = 0;
+            break;
+    }
+
+    if (playAgain) {
+        int choice;
+        printf("\nEnter 0 to exit or 1 to play again: ");
+        scanf("%d", &choice);
+
+        if (choice == 0) {
+            playAgain = 0;
+        } else if (choice != 1) {
+            printf("Invalid input. Exiting the program.\n");
+            playAgain = 0;
+        }
+    }
+}
+
+printf("Thank you for playing the MCQ Quiz!\n");
+
+getchar();
+
+return 0;
+}
