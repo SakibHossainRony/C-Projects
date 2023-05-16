@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+struct Question {
+    char question[100];
+    char options[4][50];
+    int answer;
+};
+
+
+void runQuiz(struct Question* questions, int numQuestions) {
+    int totalMarks = 0;
+
+    printf("Welcome to the MCQ Quiz!\n");
+    printf("Enter your answers as the corresponding option number (e.g., 1, 2, 3, 4).\n\n");
+
+    for (int i = 0; i < numQuestions; i++) {
+        printf("%s\n", questions[i].question);
+
+        for (int j = 0; j < 4; j++) {
+            printf("%d. %s\n", j + 1, questions[i].options[j]);
+        }
+
+        int userAnswer;
+        printf("Your answer: ");
+        scanf("%d", &userAnswer);
+
+        if (userAnswer == questions[i].answer) {
+            totalMarks++;
+        }
+    }
+
+    printf("\nTotal Marks Obtained: %d/%d\n", totalMarks, numQuestions);
+}
+
+void resetQuiz(int* totalMarks) {
+    *totalMarks = 0;
+}
+
+int main() {
+    struct Question questions[] = {
+        {
+            "What is the capital of France?",
+            { "London", "Paris", "Berlin", "Rome" },
+            2
+        },
+        {
+            "Which planet is known as the Red Planet?",
+            { "Mars", "Jupiter", "Venus", "Saturn" },
+            1
+        },
+        {
+            "Who painted the Mona Lisa?",
+            { "Pablo Picasso", "Vincent van Gogh", "Leonardo da Vinci", "Michelangelo" },
+            3
+        }
+    };
+
+    int numQuestions = sizeof(questions) / sizeof(questions[0]);
+    int totalMarks = 0;
+    int playAgain = 1;
+
+    while (playAgain) {
+        runQuiz(questions, numQuestions);
+
+        int choice;
+        printf("\nEnter 0 to exit or 1 to play again: ");
+        scanf("%d", &choice);
+
+        if (choice == 0) {
+            playAgain = 0;
+        } else if (choice == 1) {
+            resetQuiz(&totalMarks);
+        } else {
+            printf("Invalid input. Exiting the program.\n");
+            playAgain = 0;
+        }
+    }
+
+    printf("Thank you for playing the MCQ Quiz!\n");
+
+    return 0;
+}
